@@ -1,0 +1,18 @@
+name: enough_coi_cli
+description: Experimental command line interface for COI.
+version: 0.0.1
+homepage: https://github.com/Enough-Software/enough_coi_cli
+
+environment:
+  sdk: '>=2.7.0 <3.0.0'
+
+dependencies:
+  args: ^1.5.2
+  enough_coi: ^0.0.2
+    #path: ../enough_coi
+  enough_console: ^0.0.2
+    #path: ../enough_console
+
+dev_dependencies:
+  pedantic: ^1.8.0
+  test: ^1.6.0
