@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
+import 'package:enough_coi_cli/global.dart';
 
 class SendCommand extends Command {
   @override
-  String get description => 'Send a message.\nExample: coi send --chat --message "hello world" --recipient "you@domain.com"';
+  String get description =>
+      'Send a message.\nExample: coi send --chat --message "hello world" --recipient "you@domain.com"';
 
   @override
   String get name => 'send';
@@ -31,13 +35,32 @@ class SendCommand extends Command {
   }
 
   @override
-  void run() {
+  void run() async {
     bool isChatMessage = argResults['chat'];
     String message = argResults['message'];
     String subject = argResults['subject'];
     List<String> recipients = argResults['recipient'];
     String accountName = argResults['account'];
-    print(
-        'Sending ${isChatMessage ? 'chat' : ''} ${subject != null ? '"' + subject + '":' : ''} "$message" to $recipients via $accountName');
+    var accounts = await Global.client.loadAccounts();
+    if (accounts == null || accounts.isEmpty) {
+      print('Error: no accounts defined, run "coi account --add" first.');
+      exit(0);
+    }
+    var account = accounts.first;
+    if (accountName != null) {
+      accountName = accountName.toLowerCase();
+      var matching =
+          accounts.where((a) => a.name.toLowerCase().contains(accountName));
+      if (matching.isEmpty) {
+        print(
+            'Error: did not find account that matches [$accountName] in ${accounts}.');
+        exit(0);
+      }
+      account = matching.first;
+    }
+    var success = await Global.client
+        .sendMessage(isChatMessage, message, recipients, account, subject);
+    print('Message sent successfully: $success');
+    exit(0);
   }
 }
