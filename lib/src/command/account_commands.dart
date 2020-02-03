@@ -4,6 +4,7 @@ import 'package:args/command_runner.dart';
 import 'package:enough_coi/email_account.dart';
 import 'package:enough_coi_cli/global.dart';
 import 'package:enough_coi_cli/src/flow/account_add_flow.dart';
+import 'package:enough_coi_cli/src/flow/account_remove_flow.dart';
 
 class AccountCommand extends Command {
   @override
@@ -14,6 +15,7 @@ class AccountCommand extends Command {
 
   AccountCommand() {
     addSubcommand(AddAccountCommand());
+    addSubcommand(RemoveAccountCommand());
     addSubcommand(ListAccountsCommand());
   }
 }
@@ -103,5 +105,45 @@ class ListAccountsCommand extends Command {
     Global.console.writeBold(' ${account.name}');
     Global.console
         .writeln(': ${account.email} on provider ${account.providerName}');
+  }
+}
+
+class RemoveAccountCommand extends Command {
+  @override
+  String get description => 'Removes an account.';
+
+  @override
+  String get name => 'remove';
+
+  //Function<String> _addFunction;
+
+  RemoveAccountCommand() {
+    argParser.addOption('name',
+        abbr: 'n', help: 'The name of the account', valueHelp: 'account');
+  }
+
+  @override
+  void run() async {
+    var accounts = await Global.client.loadAccounts();
+    if (accounts == null || accounts.isEmpty) {
+      Global.console.print(
+          'You do not have any accounts configured. Call "coi account add" to create one.');
+      exit(0);
+    }
+    var name = argResults['name'];
+    if (name is String && name != null && name.isNotEmpty) {
+      name = name.toLowerCase();
+      var matches = accounts.where((a) =>
+          (a.name.toLowerCase().contains(name) ||
+              a.email.toLowerCase().contains(name)));
+      if (matches.isEmpty) {
+        Global.console.print('No account  matches $name:');
+      } else {
+        await RemoveAccountFlow(matches.toList()).run();
+      }
+    } else {
+      await RemoveAccountFlow(accounts).run();
+    }
+    exit(0);
   }
 }
