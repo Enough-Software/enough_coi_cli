@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:enough_coi/email_account.dart';
-import 'package:enough_coi_cli/src/command/add_account_command.dart';
+import 'package:enough_coi_cli/src/command/account_commands.dart';
 import 'package:enough_coi_cli/src/flow.dart';
 
 import '../../global.dart';

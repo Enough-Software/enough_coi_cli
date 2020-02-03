@@ -34,7 +34,11 @@ class MainFlow extends Flow<void> {
 
         var chatMessages = await Global.client.fetchChatMessages(account);
         Global.console.stopProgress();
-        Global.console.print('${chatMessages.length} chat messages:');
+        if (chatMessages == null) {
+          print('Error: Unable to load messages.');
+          exit(0);
+        }
+        Global.console.print('${chatMessages?.length} chat messages:');
         Global.console.list(chatMessages.map((m) =>
             '${m.decodeHeaderValue('from')}: ${m.decodeHeaderValue('subject')}'));
         exit(0);
@@ -58,6 +62,49 @@ class MainFlow extends Flow<void> {
    \_____\____/_____|   |_|  |_|\___||___/___/\___|_| |_|\__, |\___|_|      \_____|______|_____|
                                                           __/ |                                 
                                                          |___/                                  
+''';
+var welcomeLogo = 
+'''
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNXK0OOkkkkkkO0KXNWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMNKkdc;'...          ..';cox0XWMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMN0xc,.                         ..;oOXWMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMN0o,.                                  .ckXMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMWXx;.                                        'l0WMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMWKo.                                             .:OWMMMMMMMMMMMMMMM
+MMMMMMMMMMMXd.                                                 .c0WMMMMMMMMMMMMM
+MMMMMMMMMWO;       .:x0Oxoc,.                                    .dNMMMMMMMMMMMM
+MMMMMMMMNd.     .cd0WMMMMMMNKOdc,.                                 :KMMMMMMMMMMM
+MMMMMMMXl.    ;xXWMMMMMMMMMWNKOxl:;;;;;;;;;;;,,,''...               ,OWMMMMMMMMM
+MMMMMMNl    .oXMMMMMMMMMMMW0dc::::::::::::::::::::::;ldl,.           ,OMMMMMMMMM
+MMMMMNo.    .:kNMMMMMMMMMWKo:::::::::::::::::::::::cxXWMN0o,.         ;KMMMMMMMM
+MMMMMk.    .cONMMMMMMMMMMMXd:::::::::::::::::::::lxKWMMMMMMNOc.        lNMMMMMMM
+MMMMX:   .c0WMMMMMMMMMMMMMWXkollloodddxdddoolodx0XWMMMMMMMMMMW0l.      .kMMMMMMM
+MMMMk.  ,OWMMMMMMMMMMMMMMMMMWNXXNNWWWWWWWWWNNNWWMMMMMMMMMMMMMMMWKd;.    cNMMMMMM
+MMMWl .lXMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWk.   ,0MMMMMM
+MMMX:.xWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMK,   .OMMMMMM
+MMMXdkWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWKOXWMMMMMMMMMMMWd.   .kMMMMMM
+MMMWNWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWx. ,OMMMMMMMMMMNx.    .kMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWo  .kMMMMMMMMWKc.     .OMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMXxoOWMMMMMMW0l.       ;XMMMMMM
+MMMMMMMMWN0kkkkO000000XWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWOc.        .dWMMMMMM
+MMMMMMMNOo::::::::::::lxXWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWMWO:.          ,KMMMMMMM
+MMMMMMWOc:::::::::::;,'':d0WMMMMMMMMMMMNK0O000KK00Okxoo0Xo.           .xWMMMMMMM
+MMMMMMNx::::::::;,'..  .:kNMMMMMMMMMMMNl..  .....    .dO:            .oNMMMMMMMM
+MMMMMMWKo:::::;'.     ;0WMMMMMMMMMMMMXl             'dd'            .lNMMMMMMMMM
+MMMMMMMWKd::;..       oWMMMMMMMMMMMM0:            .:l;             .dNMMMMMMMMMM
+MMMMMMMMMXx;.         '0MMMMMMMMMMNx'            .,'              'kWMMMMMMMMMMM
+MMMMMMMMMMNk'         .kMMMMMMMMWKc.                            .lKMMMMMMMMMMMMM
+MMMMMMMMMMMMXo.        'dKWMMMMXd.                            .:OWMMMMMMMMMMMMMM
+MMMMMMMMMMMMMWKd'        .:kNNx,                            .cOWMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMNkc.       .''                           .,dKWMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMWXkc'.                              .:d0WMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMN0xl;..                    .,cdOXWMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMWNKOxolc:;;;,;;;:clodk0XWMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWWWWWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 ''';
     console.printRaw(welcome);
     console.addLineMark();
