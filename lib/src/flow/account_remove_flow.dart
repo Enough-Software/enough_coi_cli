@@ -17,7 +17,7 @@ class RemoveAccountFlow extends Flow<EmailAccount> {
       selectedAccount =
           await SelectAccountFlow(_accounts, allowCommands: false).run();
     } else {
-      selectedAccount == _accounts.first;
+      selectedAccount = _accounts.first;
     }
     var confirmation = await Global.console
         .readInput('Really remove account ${selectedAccount.name} [y/N]? ');
