@@ -32,15 +32,41 @@ class MainFlow extends Flow<void> {
         Global.console.write(' ');
         Global.console.startProgress();
 
-        var chatMessages = await Global.client.fetchChatMessages(account);
+        var conversations = await Global.client.fetchConversations(account);
         Global.console.stopProgress();
-        if (chatMessages == null) {
-          print('Error: Unable to load messages.');
+        Global.console.list(
+            conversations.map((c) => '${c.name}: ${c.lastMessage.subject}'));
+        // Global.console.list(
+        //     conversations.map((c) => '${c.name}: ${c.threadReference}'));
+
+        var conversationNumber = await Global.console.readInput('Number: ');
+        if (conversationNumber == null || conversationNumber.startsWith('q')) {
           exit(0);
         }
-        Global.console.print('${chatMessages?.length} chat messages:');
-        Global.console.list(chatMessages.map((m) =>
-            '${m.decodeHeaderValue('from')}: ${m.decodeHeaderValue('subject')}'));
+        var selectedConversation =
+            Global.console.parseListChoice(conversationNumber, conversations);
+        if (selectedConversation != null) {
+          Global.console.returnToLineMark();
+          Global.console.addLineMark();
+          Global.console.write(account.name + ' / ');
+          Global.console.writeBold(selectedConversation.name);
+          Global.console.writeln();
+          for (var message in selectedConversation.messages) {
+            Global.console.writeBold(message.from?.name ?? message.from?.email);
+            Global.console.write(': ${message.subject}');
+            Global.console.writeln();
+          }
+        }
+
+        // var chatMessages = await Global.client.fetchChatMessages(account);
+        // Global.console.stopProgress();
+        // if (chatMessages == null) {
+        //   print('Error: Unable to load messages.');
+        //   exit(0);
+        // }
+        // Global.console.print('${chatMessages?.length} chat messages:');
+        // Global.console.list(chatMessages.map((m) =>
+        //     '${m.decodeHeaderValue('from')}: ${m.decodeHeaderValue('subject')}'));
         exit(0);
         //TODO switch to conversation flow
         // var conversation = await SelectConversationFlow(account).run();
@@ -63,8 +89,7 @@ class MainFlow extends Flow<void> {
                                                           __/ |                                 
                                                          |___/                                  
 ''';
-var welcomeLogo = 
-'''
+    var welcomeLogo = '''
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNXK0OOkkkkkkO0KXNWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM

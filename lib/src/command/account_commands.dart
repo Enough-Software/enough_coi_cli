@@ -137,7 +137,7 @@ class RemoveAccountCommand extends Command {
           (a.name.toLowerCase().contains(name) ||
               a.email.toLowerCase().contains(name)));
       if (matches.isEmpty) {
-        Global.console.print('No account  matches $name:');
+        Global.console.print('No account matches $name:');
       } else {
         await RemoveAccountFlow(matches.toList()).run();
       }
