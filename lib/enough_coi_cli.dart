@@ -32,6 +32,7 @@ CommandRunner defineCommands() {
   var runner = CommandRunner('coi', 'Chat via your commandline.')
     ..addCommand(SendCommand())
     ..addCommand(DiscoverCommand())
+    ..addCommand(CheckCommand())
     ..addCommand(AccountCommand())
     ..argParser.addFlag('verbose',
         abbr: 'v', help: 'Show additional diagnostic info', defaultsTo: false);
